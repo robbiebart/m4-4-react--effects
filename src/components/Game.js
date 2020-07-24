@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
@@ -34,7 +35,11 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        <Item />
+        {/* TODO: Add <Item> instances here, 1 for each item type. pass item info as a prop, 
+        mapping through 
+        items to repeat the item component, passing the whole item object 
+        and using all of them   */}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
