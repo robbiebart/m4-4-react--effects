@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
-
+import useInterval from "../hooks/use-interval.hook";
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -11,21 +11,63 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+const itemsObj = {};
+items.forEach((item) => {
+  itemsObj[item.id] = item;
+});
+
+/*
+const calculateCookiesPerSecond = (purchasedItems) => {
+  return Object.keys(purchasedItems).reduce((acc, itemId) => {
+    const numOwned = purchasedItems[itemId];
+    const item = items.find((item) => item.id === itemId);
+    const value = item.value;
+    return acc + value * numOwned;
+  }, 0);
+};
+*/
+
 const Game = () => {
-  const [cookies, setCookies] = React.useState(0);
-  const [purchasedItem, setPurchasedItem] = React.useState({
+  const [cookies, setCookies] = useState(0);
+  const [purchasedItem, setPurchasedItem] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
 
+  const calculateCookiesPerTick = (purchasedItem) => {
+    let tick = 0;
+    tick += purchasedItem.cursor * itemsObj.cursor.value;
+    tick += purchasedItem.grandma * itemsObj.grandma.value;
+    tick += purchasedItem.farm * itemsObj.farm.value;
+    return tick;
+  };
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItem);
+
+    // setCookies and give it numOfGeneratedCookies
+    setCookies(cookies + numOfGeneratedCookies);
+  }, 1000);
+
+  useEffect(() => {
+    document.title = `I got ${cookies}`;
+  }, [cookies]);
+
+  /*
+no d array: use effect runs every time
+empty array: use effect runs on first render
+a specific dependency array: useeffect runs on the rerendering of that specific item; this can be 
+multiple items
+*/
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{cookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItem)}</strong> cookies per
+          second
         </Indicator>
         <Button
           onClick={(ev) => {
