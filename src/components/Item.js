@@ -1,31 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   display: flex;
   flex-direction: row;
-  border: 0px 0px 5px 0px solid white;
+  border: 5px solid white;
+`;
 
-  .item-cost {
-    display: flex;
-    flex-direction: column;
-  }
+const ItemInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 2px solid red;
+`;
+
+const Counter = styled.div`
+  border: 2px solid blue;
 `;
 
 const Item = (props) => {
+  console.log("purchased item", props.purchasedItem);
+
   return (
-    <Wrapper>
-      <div className="item-cost">
+    <Wrapper
+      onClick={(ev) => {
+        props.setPurchasedItem({
+          ...props.purchasedItem,
+          [props.id]: props.purchasedItem[props.id] + 1,
+        });
+      }}
+    >
+      <ItemInfo>
         <div className="item">
-          <h3>Cursor</h3>
+          <h3>{props.id}</h3>
         </div>
         <div className="cost">
-          <p>Cost 10 Cookies. Produces 1 cookie/second.</p>
+          <p>
+            Cost {props.cost} Cookies. Produces {props.value} cookie/second.
+          </p>
         </div>
-      </div>
-      <div className="counter">
-        <h2>0</h2>
-      </div>
+      </ItemInfo>
+      <Counter>
+        <h2>{props.purchasedItem[props.id]}</h2>
+        {/* <h2>{props.handleClick}</h2> */}
+      </Counter>
     </Wrapper>
   );
 };

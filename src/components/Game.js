@@ -12,39 +12,55 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [cookies, setCookies] = React.useState(0);
+  const [purchasedItem, setPurchasedItem] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
+          <Total>{cookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button
+          onClick={(ev) => {
+            setCookies(cookies + 1);
+          }}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        <Item />
-        {/* TODO: Add <Item> instances here, 1 for each item type. pass item info as a prop, 
-        mapping through 
-        items to repeat the item component, passing the whole item object 
-        and using all of them   */}
+
+        {items.map((item) => {
+          return (
+            <Item
+              id={item.id}
+              name={item.name}
+              cost={item.cost}
+              value={item.value}
+              setPurchasedItem={setPurchasedItem}
+              purchasedItem={purchasedItem}
+            />
+          );
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
   );
 };
+
+/* TODO: Add <Item> instances here, 1 for each item type. pass item info as a prop, 
+        mapping through 
+        items to repeat the item component, passing the whole item object 
+        and using all of them   */
 
 const Wrapper = styled.div`
   display: flex;
