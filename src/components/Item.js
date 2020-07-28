@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.button`
@@ -18,10 +18,15 @@ const Counter = styled.div`
 `;
 
 const Item = (props) => {
-  console.log("purchased item", props.purchasedItem);
+  const cursorItemRef = useRef(null);
+
+  useEffect(() => {
+    if (props.id === "cursor") cursorItemRef.current.focus();
+  }, []);
 
   return (
     <Wrapper
+      ref={cursorItemRef}
       onClick={(ev) => {
         props.setPurchasedItem({
           ...props.purchasedItem,

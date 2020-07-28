@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
 import cookieSrc from "../cookie.svg";
+import useKeydown from "../hooks/useKeydown";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -15,17 +17,6 @@ const itemsObj = {};
 items.forEach((item) => {
   itemsObj[item.id] = item;
 });
-
-/*
-const calculateCookiesPerSecond = (purchasedItems) => {
-  return Object.keys(purchasedItems).reduce((acc, itemId) => {
-    const numOwned = purchasedItems[itemId];
-    const item = items.find((item) => item.id === itemId);
-    const value = item.value;
-    return acc + value * numOwned;
-  }, 0);
-};
-*/
 
 const Game = () => {
   const [cookies, setCookies] = useState(0);
@@ -50,9 +41,15 @@ const Game = () => {
     setCookies(cookies + numOfGeneratedCookies);
   }, 1000);
 
-  useEffect(() => {
-    document.title = `I got ${cookies}`;
-  }, [cookies]);
+  // useEffect(() => {
+  //   document.title = `I got ${cookies}`;
+  // }, [cookies]);
+
+  useKeydown("Space", () => {
+    setCookies(cookies + itemsObj.cursor.value);
+  });
+
+  useDocumentTitle(`I got ${cookies}`, "Cookie Clicker :)");
 
   /*
 no d array: use effect runs every time
